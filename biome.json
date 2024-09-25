@@ -1,0 +1,45 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "correctness": {
+        "useExhaustiveDependencies": "warn",
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
+      "complexity": {
+        "useOptionalChain": "warn"
+      },
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120,
+    "lineEnding": "lf",
+    "ignore": [".next/**"]
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "single",
+      "arrowParentheses": "asNeeded",
+      "semicolons": "always",
+      "bracketSpacing": true,
+      "bracketSameLine": false
+    }
+  },
+  "files": {
+    "ignore": ["dist/**/*", "node_modules/**/*", "build/**/*", ".next/**/*", "public/YandexMetrikaScript.js"]
+  }
+}
