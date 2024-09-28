@@ -42,7 +42,7 @@ const Post = () => {
         </p>
       </div>
       {/*INTER*/}
-      <div className={'flex items-center justify-between text-sm my-4'}>
+      <div className={'flex items-center justify-between text-sm my-4 flex-wrap'}>
         <div className={'flex gap-8'}>
           <div className={'flex items-center gap-4 bg-slate-50 p-2 rounded-xl'}>
             <Image className={'cursor-pointer'} src={'/like.png'} alt={'Like button'} width={16} height={16} />
@@ -60,7 +60,7 @@ const Post = () => {
           </div>
         </div>
         <div>
-          <div className={'flex items-center gap-4 bg-slate-50 p-2 rounded-xl'}>
+          <div className={'flex items-center gap-4 bg-slate-50 p-2 rounded-xl mt-2 sm:mt-0'}>
             <Image className={'cursor-pointer'} src={'/share.png'} alt={'Like button'} width={16} height={16} />
             <span className={'text-gray-300'}>|</span>
             <span className={'text-gray-300'}>
