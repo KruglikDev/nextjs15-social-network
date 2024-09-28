@@ -1,3 +1,4 @@
+import Ad from '@/components/Ad';
 import ProfileCard from '@/components/ProfileCard';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -85,16 +86,18 @@ const LeftMenu = ({ type }: LeftMenuProps) => {
     <div className={'flex flex-col gap-6'}>
       {type === 'home' && <ProfileCard />}
       <div className={'p-4 bg-white rounded-lg shadow-md text-sm text-gray-500 flex flex-col gap-2'}>
-        {leftMenuItems.map(item => (
+        {leftMenuItems.map((item, index) => (
           <Fragment key={item.id}>
             <Link href={item.link} className={'flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100'}>
               <Image src={item.icon} alt={item.alt} width={20} height={20} />
               <span>{item.text}</span>
             </Link>
-            <hr className={'border-t-1 border-gray-50 w-36 self-center'} />
+            {leftMenuItems.length !== index + 1 && <hr className={'border-t-1 border-gray-50 w-36 self-center'} />}
           </Fragment>
         ))}
       </div>
+
+      <Ad size={'sm'} />
     </div>
   );
 };
