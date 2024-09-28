@@ -13,7 +13,7 @@ const Navbar = () => {
         </Link>
       </div>
 
-      <div className={'hidden md:flex w-[50%] text-sm'}>
+      <div className={'hidden md:flex w-[50%] text-sm items-center justify-between'}>
         <div className={'flex gap-6 text-gray-600 items-center'}>
           <Link className={'flex gap-2 items-center'} href={'/'}>
             <Image width={16} height={16} src={'/home.png'} alt={'HomePage'} />
@@ -28,6 +28,10 @@ const Navbar = () => {
             <span>Stories</span>
           </Link>
         </div>
+        <div className={'hidden xl:flex p-2 bg-slate-100 items-center rounded-xl'}>
+          <input type='text' placeholder={'search...'} className={'outline-none bg-transparent'} />
+          <Image alt={'Search icon'} width={14} height={14} src={'/search.png'} />
+        </div>
       </div>
 
       <div className={'w-[30%] flex items-center gap-4 xl:gap-8 justify-end'}>
@@ -37,7 +41,7 @@ const Navbar = () => {
         <ClerkLoaded>
           <SignedIn>
             <div className={'cursor-pointer'}>
-              <Image width={20} height={20} src={'/people.png'} alt={'People'} />
+              <Image width={24} height={24} src={'/people.png'} alt={'People'} />
             </div>
             <div className={'cursor-pointer'}>
               <Image width={20} height={20} src={'/messages.png'} alt={'Messages'} />
