@@ -35,29 +35,31 @@ const Navbar = () => {
       </nav>
 
       <div className={'w-[30%] flex items-center gap-4 xl:gap-8 justify-end'}>
-        <ClerkLoading>
-          <Spinner />
-        </ClerkLoading>
-        <ClerkLoaded>
-          <SignedIn>
-            <div className={'cursor-pointer'}>
-              <Image width={24} height={24} src={'/people.png'} alt={'People'} />
-            </div>
-            <div className={'cursor-pointer'}>
-              <Image width={20} height={20} src={'/messages.png'} alt={'Messages'} />
-            </div>
-            <div className={'cursor-pointer'}>
-              <Image width={20} height={20} src={'/notifications.png'} alt={'Notifications'} />
-            </div>
-            <UserButton />
-          </SignedIn>
-          <SignedOut>
-            <div className={'flex items-center gap-2 text-sm cursor-pointer'}>
-              <Image width={20} height={20} src={'/people.png'} alt={'Login'} />
-              <Link href={'/sign-in'}>Login/Register</Link>
-            </div>
-          </SignedOut>
-        </ClerkLoaded>
+        <div className={'hidden md:block'}>
+          <ClerkLoading>
+            <Spinner />
+          </ClerkLoading>
+          <ClerkLoaded>
+            <SignedIn>
+              <div className={'cursor-pointer'}>
+                <Image width={24} height={24} src={'/people.png'} alt={'People'} />
+              </div>
+              <div className={'cursor-pointer'}>
+                <Image width={20} height={20} src={'/messages.png'} alt={'Messages'} />
+              </div>
+              <div className={'cursor-pointer'}>
+                <Image width={20} height={20} src={'/notifications.png'} alt={'Notifications'} />
+              </div>
+              <UserButton />
+            </SignedIn>
+            <SignedOut>
+              <div className={'flex items-center gap-2 text-sm cursor-pointer'}>
+                <Image width={20} height={20} src={'/people.png'} alt={'Login'} />
+                <Link href={'/sign-in'}>Login/Register</Link>
+              </div>
+            </SignedOut>
+          </ClerkLoaded>
+        </div>
         <MobileMenu />
       </div>
     </div>
