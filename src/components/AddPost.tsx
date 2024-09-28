@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const AddPost = () => {
   return (
-    <section className={'p-4 bg-white rounded-lg flex gap-4 justify-between text-sm'}>
+    <section className={'p-4 bg-white shadow-md rounded-lg flex gap-4 justify-between text-sm'}>
       {/*Avatar*/}
       <Image
         width={48}
