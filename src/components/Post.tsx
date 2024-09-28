@@ -1,3 +1,4 @@
+import Comments from '@/components/Comments';
 import Image from 'next/image';
 
 const Post = () => {
@@ -41,7 +42,7 @@ const Post = () => {
         </p>
       </div>
       {/*INTER*/}
-      <div className={'flex items-center justify-between text-sm mt-4'}>
+      <div className={'flex items-center justify-between text-sm my-4'}>
         <div className={'flex gap-8'}>
           <div className={'flex items-center gap-4 bg-slate-50 p-2 rounded-xl'}>
             <Image className={'cursor-pointer'} src={'/like.png'} alt={'Like button'} width={16} height={16} />
@@ -68,6 +69,7 @@ const Post = () => {
           </div>
         </div>
       </div>
+      <Comments />
     </article>
   );
 };
