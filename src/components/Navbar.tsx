@@ -13,7 +13,7 @@ const Navbar = () => {
         </Link>
       </div>
 
-      <div className={'hidden md:flex w-[50%] text-sm items-center justify-between'}>
+      <nav className={'hidden md:flex w-[50%] text-sm items-center justify-between'}>
         <div className={'flex gap-6 text-gray-600 items-center'}>
           <Link className={'flex gap-2 items-center'} href={'/'}>
             <Image width={16} height={16} src={'/home.png'} alt={'HomePage'} />
@@ -32,7 +32,7 @@ const Navbar = () => {
           <input type='text' placeholder={'search...'} className={'outline-none bg-transparent'} />
           <Image alt={'Search icon'} width={14} height={14} src={'/search.png'} />
         </div>
-      </div>
+      </nav>
 
       <div className={'w-[30%] flex items-center gap-4 xl:gap-8 justify-end'}>
         <ClerkLoading>
