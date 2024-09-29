@@ -1,9 +1,6 @@
-import { auth } from '@clerk/nextjs/server';
 import Image from 'next/image';
 
 const AddPost = () => {
-  const data = auth();
-  console.log(data);
   return (
     <section className={'p-4 bg-white shadow-md rounded-lg flex gap-4 justify-between text-sm'}>
       {/*Avatar*/}
