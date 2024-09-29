@@ -1,6 +1,6 @@
 'use client';
 
-import { switchFollow } from '@/lib/actions';
+import { switchBlock, switchFollow } from '@/lib/actions';
 import { useOptimistic, useState } from 'react';
 
 type UserInfoCardInteractionProps = {
@@ -23,14 +23,21 @@ const UserInfoCardInteraction = ({
     following: isFollowing,
     followingRequestSent: isFollowingSent,
   });
-  const [optimisticFollow, setOptimisticFollow] = useOptimistic(userState, state => ({
-    ...state,
-    following: state.following && false,
-    followingRequestSent: !state.following && !state.followingRequestSent,
-  }));
+  const [optimisticState, setOptimisticState] = useOptimistic(userState, (state, value: 'follow' | 'block') =>
+    value === 'follow'
+      ? {
+          ...state,
+          following: state.following && false,
+          followingRequestSent: !state.following && !state.followingRequestSent,
+        }
+      : {
+          ...state,
+          blocked: !state.blocked,
+        },
+  );
 
   const follow = async () => {
-    setOptimisticFollow('');
+    setOptimisticState('follow');
     try {
       await switchFollow(userId);
       setUserState(prevState => ({
@@ -43,20 +50,33 @@ const UserInfoCardInteraction = ({
     }
   };
 
+  const block = async () => {
+    setOptimisticState('block');
+    try {
+      await switchBlock(userId);
+      setUserState(prevState => ({
+        ...prevState,
+        blocked: !prevState.blocked,
+      }));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <form action={follow}>
         <button type={'submit'} className={'w-full bg-blue-500 text-white text-sm rounded-md p-2'}>
-          {optimisticFollow.following
+          {optimisticState.following
             ? 'Following'
-            : optimisticFollow.followingRequestSent
+            : optimisticState.followingRequestSent
               ? 'Friend Request Sent'
               : 'Follow'}
         </button>
       </form>
-      <form action='' className={'self-end'}>
+      <form action={block} className={'self-end'}>
         <button type={'submit'} className={'text-red-400 text-xs cursor-pointer'}>
-          {optimisticFollow.blocked ? 'Unblock User' : 'Block User'}
+          {optimisticState.blocked ? 'Unblock User' : 'Block User'}
         </button>
       </form>
     </>
