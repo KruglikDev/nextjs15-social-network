@@ -1,5 +1,5 @@
 import Ad from '@/components/Ad';
-import ProfileCard from '@/components/ProfileCard';
+import ProfileCard from '@/components/leftMenu/ProfileCard';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment } from 'react';

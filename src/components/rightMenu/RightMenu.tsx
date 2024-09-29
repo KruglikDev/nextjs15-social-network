@@ -1,9 +1,9 @@
 import Ad from '@/components/Ad';
-import Birthdays from '@/components/Birthdays';
-import FriendRequests from '@/components/FriendRequests';
 import Spinner from '@/components/Spinner';
-import UserInfoCard from '@/components/UserInfoCard';
-import UserMediaCard from '@/components/UserMediaCard';
+import Birthdays from '@/components/rightMenu/Birthdays';
+import FriendRequests from '@/components/rightMenu/FriendRequests';
+import UserInfoCard from '@/components/rightMenu/UserInfoCard';
+import UserMediaCard from '@/components/rightMenu/UserMediaCard';
 import type { User } from '@prisma/client';
 import { Suspense } from 'react';
 
