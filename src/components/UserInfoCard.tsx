@@ -1,8 +1,10 @@
+import prisma from '@/lib/client';
+import { auth } from '@clerk/nextjs/server';
 import type { User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const UserInfoCard = ({ user }: { user: User }) => {
+const UserInfoCard = async ({ user }: { user: User }) => {
   const username = user.name && user.surname ? `${user.name} ${user.surname}` : user.username;
   const createdAtDate = new Date(user.createdAt);
   const formattedDate = createdAtDate.toLocaleDateString('en-US', {
@@ -10,6 +12,51 @@ const UserInfoCard = ({ user }: { user: User }) => {
     month: 'long',
     day: 'numeric',
   });
+
+  let isUserBlocked = false;
+  let isFollowing = false;
+  let isFollowingSent = false;
+  const { userId: currentUserId } = auth();
+
+  if (currentUserId) {
+    const blockRes = await prisma.block.findFirst({
+      where: {
+        // Кто блокировал Id
+        blockerId: currentUserId,
+        // Список заблокированных
+        blockedId: user.id,
+      },
+    });
+    if (blockRes) {
+      isUserBlocked = true;
+    } else {
+      isUserBlocked = false;
+    }
+    const followingRes = await prisma.follower.findFirst({
+      where: {
+        // The ID of the user who is following another user
+        followerId: currentUserId,
+        // The ID of the user being followed
+        followingId: user.id,
+      },
+    });
+    if (followingRes) {
+      isFollowing = true;
+    } else {
+      isFollowing = false;
+    }
+    const followingSentRes = await prisma.followRequest.findFirst({
+      where: {
+        senderId: currentUserId,
+        receiverId: user.id,
+      },
+    });
+    if (followingSentRes) {
+      isFollowingSent = true;
+    } else {
+      isFollowingSent = false;
+    }
+  }
 
   return (
     <section className={'p-4 bg-white rounded-lg shadow-md text-sm flex flex-col gap-4'}>
