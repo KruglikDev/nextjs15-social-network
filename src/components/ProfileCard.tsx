@@ -1,22 +1,40 @@
+import prisma from '@/lib/client';
+import { auth } from '@clerk/nextjs/server';
 import Image from 'next/image';
+import Link from 'next/link';
 
-const ProfileCard = () => {
+const ProfileCard = async () => {
+  const { userId } = auth();
+
+  if (!userId) return null;
+
+  const user = await prisma.user.findFirst({
+    where: { id: userId },
+    include: {
+      _count: {
+        select: {
+          followers: true,
+        },
+      },
+    },
+  });
+
+  if (!user) return null;
+
+  const username = user.name && user.surname ? `${user.name} ${user.surname}` : user.username;
+
   return (
     <section className={'p-4 bg-white rounded-lg shadow-md text-sm flex flex-col gap-6'}>
       <div className={'h-20 relative'}>
         <Image
           alt={'profile image background'}
-          src={
-            'https://images.unsplash.com/photo-1567378890217-fb9f52e95b28?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-          }
+          src={user.cover || '/noCover.png'}
           fill
           className={'rounded-md object-cover'}
         />
         <Image
           alt={'profile image'}
-          src={
-            'https://images.unsplash.com/photo-1450096315186-13dc369ab43e?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-          }
+          src={user.avatar || '/noAvatar.png'}
           width={48}
           height={48}
           className={
@@ -25,7 +43,7 @@ const ProfileCard = () => {
         />
       </div>
       <div className={'h-20 flex flex-col gap-2 items-center'}>
-        <span className={'font-semibold'}>Edward May</span>
+        <span className={'font-semibold'}>{username}</span>
 
         <div className={'flex items-center gap-4'}>
           <div className={'flex'}>
@@ -58,12 +76,16 @@ const ProfileCard = () => {
             />
           </div>
 
-          <span className={'text-xs text-gray-500'}>500 followers</span>
+          <span className={'text-xs text-gray-500'}>{user._count.followers} followers</span>
         </div>
 
-        <button className={'bg-blue-500 text-white text-xs p-2 rounded-md'} type={'button'}>
+        <Link
+          href={`/profile/${user.username}`}
+          className={'bg-blue-500 text-white text-xs p-2 rounded-md'}
+          type={'button'}
+        >
           My Profile
-        </button>
+        </Link>
       </div>
     </section>
   );
