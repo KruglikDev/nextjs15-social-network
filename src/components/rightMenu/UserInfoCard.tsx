@@ -1,3 +1,4 @@
+import UserInfoCardInteraction from '@/components/rightMenu/UserInfoCardInteraction';
 import prisma from '@/lib/client';
 import { auth } from '@clerk/nextjs/server';
 import type { User } from '@prisma/client';
@@ -115,10 +116,13 @@ const UserInfoCard = async ({ user }: { user: User }) => {
           </div>
         </div>
 
-        <button type={'button'} className={'bg-blue-500 text-white text-sm rounded-md p-2'}>
-          Follow
-        </button>
-        <span className={'text-red-400 self-end text-xs cursor-pointer'}>Block User</span>
+        <UserInfoCardInteraction
+          userId={user.id}
+          currentUserId={currentUserId}
+          isUserBlocked={isUserBlocked}
+          isFollowing={isFollowing}
+          isFollowingSent={isFollowingSent}
+        />
       </div>
     </section>
   );
