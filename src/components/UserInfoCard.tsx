@@ -1,7 +1,16 @@
+import type { User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const UserInfoCard = ({ userId }: { userId?: string }) => {
+const UserInfoCard = ({ user }: { user: User }) => {
+  const username = user.name && user.surname ? `${user.name} ${user.surname}` : user.username;
+  const createdAtDate = new Date(user.createdAt);
+  const formattedDate = createdAtDate.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
     <section className={'p-4 bg-white rounded-lg shadow-md text-sm flex flex-col gap-4'}>
       {/*TOP*/}
@@ -14,44 +23,48 @@ const UserInfoCard = ({ userId }: { userId?: string }) => {
       {/*BOTTOM*/}
       <div className={'flex flex-col gap-4 text-gray-500'}>
         <div className={'flex items-center gap-2'}>
-          <span className={'text-xl text-black'}>Jan Fleming</span>
-          <span className={'text-sm'}>@julius</span>
+          <span className={'text-xl text-black'}>{username}</span>
+          <span className={'text-sm'}>@{user.username}</span>
         </div>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, alias aliquid assumenda beatae dicta
-          eligendi est excepturi incidunt laboriosam nam nobis numquam obcaecati praesentium provident quae ratione
-          vitae! Dolores, praesentium!
-        </p>
-        <div className={'flex items-center gap-2'}>
-          <Image src={'/map.png'} alt={'Map icon'} width={16} height={16} />
-          <span>
-            Living in <b>Denver</b>
-          </span>
-        </div>
-        <div className={'flex items-center gap-2'}>
-          <Image src={'/school.png'} alt={'School icon'} width={16} height={16} />
-          <span>
-            Went to <b>Denver High School</b>
-          </span>
-        </div>
-        <div className={'flex items-center gap-2'}>
-          <Image src={'/work.png'} alt={'Work icon'} width={16} height={16} />
-          <span>
-            Works at <b>Apple Inc.</b>
-          </span>
-        </div>
+        {user.description && <p>{user.description}</p>}
+        {user.city && (
+          <div className={'flex items-center gap-2'}>
+            <Image src={'/map.png'} alt={'Map icon'} width={16} height={16} />
+            <span>
+              Living in <b>{user.city}</b>
+            </span>
+          </div>
+        )}
+        {user.school && (
+          <div className={'flex items-center gap-2'}>
+            <Image src={'/school.png'} alt={'School icon'} width={16} height={16} />
+            <span>
+              Went to <b>{user.school}</b>
+            </span>
+          </div>
+        )}
+        {user.work && (
+          <div className={'flex items-center gap-2'}>
+            <Image src={'/work.png'} alt={'Work icon'} width={16} height={16} />
+            <span>
+              Works at <b>{user.work}</b>
+            </span>
+          </div>
+        )}
 
         <div className={'flex items-center justify-between flex-wrap'}>
-          <div className={'flex gap-1 items-center'}>
-            <Image src={'/link.png'} alt={'Link icon'} width={16} height={16} />
-            <Link className={'text-blue-500 font-medium'} href={'https://lama.dev'}>
-              lama.dev
-            </Link>
-          </div>
+          {user.website && (
+            <div className={'flex gap-1 items-center'}>
+              <Image src={'/link.png'} alt={'Link icon'} width={16} height={16} />
+              <Link className={'text-blue-500 font-medium'} href={user.website}>
+                {user.website}
+              </Link>
+            </div>
+          )}
 
           <div className={'flex gap-1 items-center'}>
             <Image src={'/date.png'} alt={'date icon'} width={16} height={16} />
-            <span>Joined November 2025</span>
+            <span>Joined {formattedDate}</span>
           </div>
         </div>
 

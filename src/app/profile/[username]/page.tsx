@@ -96,7 +96,7 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
         </div>
       </main>
       <aside className={'hidden lg:block w-[30%]'}>
-        <RightMenu userId={'test'} />
+        <RightMenu user={user} />
       </aside>
     </div>
   );
