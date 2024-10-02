@@ -79,12 +79,12 @@ const ProfilePage = async ({ params }: ProfilePageProps) => {
             <div className={'flex items-center justify-center gap-12 mb-4'}>
               <div className={'flex flex-col items-center'}>
                 <span className={'font-medium'}>{user._count.posts}</span>
-                <span className={'text-sm'}>Posts</span>
+                <span className={'text-sm'}>{user._count.posts === 1 ? 'Post' : 'Posts'}</span>
               </div>
 
               <div className={'flex flex-col items-center'}>
                 <span className={'font-medium'}>{user._count.followers}</span>
-                <span className={'text-sm'}>Followers</span>
+                <span className={'text-sm'}>{user._count.followers === 1 ? 'Follower' : 'Followers'}</span>
               </div>
               <div className={'flex flex-col items-center'}>
                 <span className={'font-medium'}>{user._count.followings}</span>
