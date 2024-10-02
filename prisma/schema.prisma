@@ -75,7 +75,9 @@ model Follower {
   createdAt DateTime @default(now())
 
   follower      User     @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  // The ID of the user who is following another user
   followerId    String
+  // The ID of the user being followed
   following      User     @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
   followingId    String
 }
