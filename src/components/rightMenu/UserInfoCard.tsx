@@ -1,3 +1,4 @@
+import UpdateUser from '@/components/rightMenu/UpdateUser';
 import UserInfoCardInteraction from '@/components/rightMenu/UserInfoCardInteraction';
 import prisma from '@/lib/client';
 import { auth } from '@clerk/nextjs/server';
@@ -64,9 +65,13 @@ const UserInfoCard = async ({ user }: { user: User }) => {
       {/*TOP*/}
       <div className={'flex justify-between items-center font-medium'}>
         <span className={'text-gray-500'}>User Information</span>
-        <Link href={'/'} className={'text-blue-500 text-xs'}>
-          See all
-        </Link>
+        {currentUserId === user.id ? (
+          <UpdateUser />
+        ) : (
+          <Link href={'/'} className={'text-blue-500 text-xs'}>
+            See all
+          </Link>
+        )}
       </div>
       {/*BOTTOM*/}
       <div className={'flex flex-col gap-4 text-gray-500'}>
