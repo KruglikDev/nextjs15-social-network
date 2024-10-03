@@ -1,7 +1,6 @@
 'use client';
 import { updateProfile } from '@/lib/actions';
 import type { User } from '@prisma/client';
-import Image from 'next/image';
 import { useRef } from 'react';
 
 const UpdateUser = ({ user }: { user: User }) => {
@@ -25,16 +24,18 @@ const UpdateUser = ({ user }: { user: User }) => {
           <div className={'mt-4 text-xs text-gray-500'}>Use the navbar profile to change the avatar or username.</div>
 
           <div className={'flex flex-col gap-4 my-4'}>
-            <label htmlFor=''>Cover Picture</label>
             <div className={'flex items-center gap-2 cursor-pointer'}>
-              <Image
-                src={user.cover || '/noCover.png'}
-                alt={'Cover Picture'}
-                width={48}
-                height={32}
-                className={'w-12 h-8 rounded-md object-cover'}
-              />
-              <span className={'underline text-xs text-gray-600'}>Change</span>
+              <div className={'flex flex-col gap-4 w-full'}>
+                <label htmlFor='' className={'text-xs text-gray-500'}>
+                  Cover Image
+                </label>
+                <input
+                  className={'ring-1 ring-gray-300 p-[13px] rounded-md text-sm'}
+                  type='text'
+                  placeholder={user?.cover || 'cover'}
+                  name={'cover'}
+                />
+              </div>
             </div>
           </div>
 
