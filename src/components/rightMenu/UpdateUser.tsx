@@ -1,9 +1,17 @@
 'use client';
+import UpdateButton from '@/components/rightMenu/UpdateButton';
 import { updateProfile } from '@/lib/actions';
 import type { User } from '@prisma/client';
-import { useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useActionState, useRef } from 'react';
 
 const UpdateUser = ({ user }: { user: User }) => {
+  const [state, formAction] = useActionState(updateProfile, {
+    success: false,
+    error: false,
+  });
+  const router = useRouter();
+
   const dialog = useRef<HTMLDialogElement>(null);
 
   return (
@@ -19,7 +27,7 @@ const UpdateUser = ({ user }: { user: User }) => {
         className={'top-0 left-0 z-50 backdrop:bg-black backdrop:bg-opacity-65 rounded-lg w-full md:w-1/2 xl:w-1/3'}
         ref={dialog}
       >
-        <form action={updateProfile} className={'p-12 bg-white flex flex-col gap-2 '}>
+        <form action={formData => formAction({ formData })} className={'p-12 bg-white flex flex-col gap-2 '}>
           <h1>Update Profile</h1>
           <div className={'mt-4 text-xs text-gray-500'}>Use the navbar profile to change the avatar or username.</div>
 
@@ -132,14 +140,25 @@ const UpdateUser = ({ user }: { user: User }) => {
             </div>
           </div>
 
-          <button type={'submit'} className={'bg-blue-500 p-2 mt-2 rounded-md text-white'}>
-            Update
-          </button>
+          <UpdateButton />
+
+          {state.success && <span className={'text-green-500'}>Profile has been updated!</span>}
+          {state.error && <span className={'text-red-500'}>Something went wrong!</span>}
         </form>
         <div
           className={'cursor-pointer hover:text-gray-500 w-fit p-2 mx-2 absolute top-0 right-0'}
-          onKeyDown={() => dialog.current?.close()}
-          onClick={() => dialog.current?.close()}
+          onKeyDown={() => {
+            dialog.current?.close();
+            if (state.success) router.refresh();
+            state.success = false;
+            state.error = false;
+          }}
+          onClick={() => {
+            dialog.current?.close();
+            if (state.success) router.refresh();
+            state.success = false;
+            state.error = false;
+          }}
         >
           <strong>X</strong>
         </div>

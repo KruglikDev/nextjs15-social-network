@@ -113,12 +113,17 @@ export const declineFollowRequest = async (userId: string) => {
   }
 };
 
-export const updateProfile = async (formData: FormData) => {
+export const updateProfile = async (
+  _prevState: { success: boolean; error: boolean },
+  payload: { formData: FormData },
+) => {
+  const { formData } = payload;
   const { userId: currentUserId } = auth();
 
   if (!currentUserId) throw new Error('User is not authenticated');
 
   const fields = Object.fromEntries(formData);
+  const filteredFields = Object.fromEntries(Object.entries(fields).filter(([_key, value]) => value !== ''));
 
   const Profile = z.object({
     cover: z.string().optional(),
@@ -131,11 +136,11 @@ export const updateProfile = async (formData: FormData) => {
     website: z.string().max(60).optional(),
   });
 
-  const validatedFields = Profile.safeParse(fields);
+  const validatedFields = Profile.safeParse(filteredFields);
 
   if (!validatedFields.success) {
     console.log(validatedFields.error.flatten().fieldErrors);
-    return null;
+    return { success: false, error: true };
   }
 
   try {
@@ -143,7 +148,9 @@ export const updateProfile = async (formData: FormData) => {
       where: { id: currentUserId },
       data: validatedFields.data,
     });
+    return { success: true, error: false };
   } catch (err) {
     console.error(err);
+    return { success: false, error: true };
   }
 };
