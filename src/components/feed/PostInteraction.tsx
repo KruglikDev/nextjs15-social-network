@@ -1,5 +1,6 @@
 'use client';
 
+import { switchLike } from '@/lib/actions';
 import { useAuth } from '@clerk/nextjs';
 import Image from 'next/image';
 import { useOptimistic, useState } from 'react';
@@ -28,6 +29,11 @@ const UserInteraction = ({ postId, likes, commentNumber }: UserInteractionProps)
     setOptimisticLike('');
 
     try {
+      await switchLike(postId);
+      setLikeState(prevState => ({
+        likesCount: prevState.isLiked ? prevState.likesCount - 1 : prevState.likesCount + 1,
+        isLiked: !prevState.isLiked,
+      }));
     } catch (err) {
       console.error(err);
     }
