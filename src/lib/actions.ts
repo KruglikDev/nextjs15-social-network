@@ -226,3 +226,39 @@ export const addPost = async (formData: FormData, img: string) => {
     throw new Error('Something went wrong');
   }
 };
+
+export const addStory = async (img: string) => {
+  const { userId: currentUserId } = auth();
+
+  const Img = z.string().min(6).max(255);
+  const validatedImg = Img.safeParse(img);
+
+  if (!validatedImg.success) {
+    return 'Invalid image link';
+  }
+  if (!currentUserId) throw new Error('User is not authenticated');
+
+  try {
+    const existingStory = await prisma.story.findFirst({
+      where: { userId: currentUserId },
+    });
+
+    if (existingStory) {
+      await prisma.story.delete({
+        where: { id: existingStory.id },
+      });
+    }
+
+    const createdStory = await prisma.story.create({
+      data: { userId: currentUserId, img: validatedImg.data, expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) },
+      include: {
+        user: true,
+      },
+    });
+
+    return createdStory;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Something went wrong');
+  }
+};
