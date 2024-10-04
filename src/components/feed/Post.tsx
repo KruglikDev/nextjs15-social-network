@@ -38,7 +38,7 @@ const Post = ({ post }: { post: PostProps }) => {
       </div>
       {/*INTER*/}
       <PostInteraction postId={post.id} likes={likesArray} commentNumber={post._count.comments} />
-      <Comments />
+      <Comments postId={post.id} />
     </article>
   );
 };
