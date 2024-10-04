@@ -1,7 +1,9 @@
+import Spinner from '@/components/Spinner';
 import Post from '@/components/feed/Post';
 import prisma from '@/lib/client';
 import { auth } from '@clerk/nextjs/server';
 import type { Post as PostType } from '@prisma/client';
+import { Suspense } from 'react';
 
 const Feed = async ({ username }: { username?: string }) => {
   const { userId } = auth();
@@ -45,11 +47,12 @@ const Feed = async ({ username }: { username?: string }) => {
     });
 
     const followingIds = following.map(f => f.followingId);
+    const ids = [...followingIds, userId];
 
     posts = await prisma.post.findMany({
       where: {
         userId: {
-          in: followingIds,
+          in: ids,
         },
       },
       include: {
@@ -73,7 +76,9 @@ const Feed = async ({ username }: { username?: string }) => {
 
   return (
     <section className={'p-4 bg-white shadow-md rounded-lg flex flex-col gap-12'}>
-      {posts?.length ? posts.map(post => <Post key={post.id} post={post} />) : 'No posts found.'}
+      <Suspense fallback={<Spinner />}>
+        {posts?.length ? posts.map(post => <Post key={post.id} post={post} />) : 'No posts found.'}
+      </Suspense>
     </section>
   );
 };

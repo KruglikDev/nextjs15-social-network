@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/client';
 import { auth } from '@clerk/nextjs/server';
+import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 export const switchFollow = async (userId: string) => {
@@ -196,6 +197,30 @@ export const addComment = async (postId: number, desc: string) => {
     });
 
     return createdComment;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Something went wrong');
+  }
+};
+
+export const addPost = async (formData: FormData, img: string) => {
+  const { userId: currentUserId } = auth();
+  const text = formData.get('desc') as string;
+
+  const Desc = z.string().min(1).max(255);
+  const validatedDesc = Desc.safeParse(text);
+
+  if (!validatedDesc.success) {
+    return 'Text must be from 1 to 255 chars long';
+  }
+  if (!currentUserId) throw new Error('User is not authenticated');
+
+  try {
+    await prisma.post.create({
+      data: { userId: currentUserId, desc: validatedDesc.data, img },
+    });
+
+    revalidatePath('/');
   } catch (err) {
     console.error(err);
     throw new Error('Something went wrong');

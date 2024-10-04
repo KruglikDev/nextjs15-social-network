@@ -12,13 +12,13 @@ type UserInteractionProps = {
 };
 
 const UserInteraction = ({ postId, likes, commentNumber }: UserInteractionProps) => {
-  const { isLoaded, userId } = useAuth();
+  const { userId } = useAuth();
 
   const [likeState, setLikeState] = useState({
     likesCount: likes.length,
     isLiked: userId ? likes.includes(userId) : false,
   });
-  const [optimisticLike, setOptimisticLike] = useOptimistic(likeState, (state, value) => {
+  const [optimisticLike, setOptimisticLike] = useOptimistic(likeState, (state, _value) => {
     return {
       likesCount: state.isLiked ? state.likesCount - 1 : state.likesCount + 1,
       isLiked: !state.isLiked,
