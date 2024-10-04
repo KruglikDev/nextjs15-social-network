@@ -1,7 +1,11 @@
+import Spinner from '@/components/Spinner';
 import Comments from '@/components/feed/Comments';
+import PostInfo from '@/components/feed/PostInfo';
 import PostInteraction from '@/components/feed/PostInteraction';
+import { auth } from '@clerk/nextjs/server';
 import type { Post as PostType, User } from '@prisma/client';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 type PostProps = PostType & {
   user: User;
@@ -10,6 +14,7 @@ type PostProps = PostType & {
 const Post = ({ post }: { post: PostProps }) => {
   const username = post.user.name && post.user.surname ? `${post.user.name} ${post.user.surname}` : post.user.username;
   const likesArray = post.likes.map(p => p.userId);
+  const { userId } = auth();
 
   return (
     <article className={'flex flex-col gap-4'}>
@@ -25,7 +30,7 @@ const Post = ({ post }: { post: PostProps }) => {
           />
           <span>{username}</span>
         </div>
-        <Image className={'cursor-pointer'} alt={'more icon'} width={16} height={16} src={'/more.png'} />
+        {userId === post.user.id && <PostInfo postId={post.id} />}
       </div>
       {/*DESC*/}
       <div className={'flex flex-col gap-4'}>
@@ -37,8 +42,12 @@ const Post = ({ post }: { post: PostProps }) => {
         <p>{post.desc}</p>
       </div>
       {/*INTER*/}
-      <PostInteraction postId={post.id} likes={likesArray} commentNumber={post._count.comments} />
-      <Comments postId={post.id} />
+      <Suspense fallback={<Spinner />}>
+        <PostInteraction postId={post.id} likes={likesArray} commentNumber={post._count.comments} />
+      </Suspense>
+      <Suspense fallback={<Spinner />}>
+        <Comments postId={post.id} />
+      </Suspense>
     </article>
   );
 };
