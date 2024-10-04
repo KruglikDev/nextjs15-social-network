@@ -181,3 +181,23 @@ export const switchLike = async (postId: number) => {
     throw new Error('Something went wrong');
   }
 };
+
+export const addComment = async (postId: number, desc: string) => {
+  const { userId: currentUserId } = auth();
+
+  if (!currentUserId) throw new Error('User is not authenticated');
+
+  try {
+    const createdComment = await prisma.comment.create({
+      data: { postId: postId, userId: currentUserId, desc: desc },
+      include: {
+        user: true,
+      },
+    });
+
+    return createdComment;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Something went wrong');
+  }
+};
