@@ -1,4 +1,5 @@
 import Comments from '@/components/feed/Comments';
+import PostInteraction from '@/components/feed/PostInteraction';
 import type { Post as PostType, User } from '@prisma/client';
 import Image from 'next/image';
 
@@ -8,6 +9,7 @@ type PostProps = PostType & {
 
 const Post = ({ post }: { post: PostProps }) => {
   const username = post.user.name && post.user.surname ? `${post.user.name} ${post.user.surname}` : post.user.username;
+  const likesArray = post.likes.map(p => p.userId);
 
   return (
     <article className={'flex flex-col gap-4'}>
@@ -35,33 +37,7 @@ const Post = ({ post }: { post: PostProps }) => {
         <p>{post.desc}</p>
       </div>
       {/*INTER*/}
-      <div className={'flex items-center justify-between text-sm my-4 flex-wrap'}>
-        <div className={'flex gap-8'}>
-          <div className={'flex items-center gap-4 bg-slate-50 p-2 rounded-xl'}>
-            <Image className={'cursor-pointer'} src={'/like.png'} alt={'Like button'} width={16} height={16} />
-            <span className={'text-gray-300'}>|</span>
-            <span className={'text-gray-300'}>
-              {1} <span className={'hidden md:inline'}>Likes</span>
-            </span>
-          </div>
-          <div className={'flex items-center gap-4 bg-slate-50 p-2 rounded-xl'}>
-            <Image className={'cursor-pointer'} src={'/comment.png'} alt={'Like button'} width={16} height={16} />
-            <span className={'text-gray-300'}>|</span>
-            <span className={'text-gray-300'}>
-              {post._count.comments} <span className={'hidden md:inline'}>Comments</span>
-            </span>
-          </div>
-        </div>
-        <div>
-          <div className={'flex items-center gap-4 bg-slate-50 p-2 rounded-xl mt-2 sm:mt-0'}>
-            <Image className={'cursor-pointer'} src={'/share.png'} alt={'Like button'} width={16} height={16} />
-            <span className={'text-gray-300'}>|</span>
-            <span className={'text-gray-300'}>
-              <span className={'hidden md:inline'}>Share</span>
-            </span>
-          </div>
-        </div>
-      </div>
+      <PostInteraction postId={post.id} likes={likesArray} commentNumber={post._count.comments} />
       <Comments />
     </article>
   );
