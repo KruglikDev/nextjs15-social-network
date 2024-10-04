@@ -1,8 +1,10 @@
 'use client';
 
+import { addComment } from '@/lib/actions';
 import { useUser } from '@clerk/nextjs';
 import type { Comment, User } from '@prisma/client';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useOptimistic, useState } from 'react';
 
 type CommentListProps = Comment & { user: User };
@@ -10,12 +12,48 @@ type CommentListProps = Comment & { user: User };
 const CommentList = ({ comments, postId }: { comments: CommentListProps[]; postId: number }) => {
   const [commentState, setCommentState] = useState(comments);
   const [desc, setDesc] = useState('');
-  const [optimisticComments, setOptimisticComments] = useOptimistic(commentState, (state, value: CommentListProps) => [
+  const [optimisticComment, setOptimisticComment] = useOptimistic(commentState, (state, value: CommentListProps) => [
     value,
     ...state,
   ]);
 
+  const router = useRouter();
+
   const { user } = useUser();
+
+  const add = async () => {
+    if (!user || !desc) return;
+
+    setOptimisticComment({
+      id: Math.random(),
+      desc,
+      createdAt: new Date(Date.now()),
+      updatedAt: new Date(Date.now()),
+      userId: user.id,
+      postId: postId,
+      user: {
+        id: user.id,
+        avatar: user.imageUrl || '/noAvatar.png',
+        createdAt: new Date(Date.now()),
+        username: user.username || 'lamadev',
+        name: user.firstName,
+        cover: '',
+        surname: user.lastName,
+        description: '',
+        city: '',
+        school: '',
+        work: '',
+        website: '',
+      },
+    });
+    try {
+      const createdComment = await addComment(postId, desc);
+      setCommentState(prev => [...prev, createdComment]);
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <>
@@ -29,10 +67,11 @@ const CommentList = ({ comments, postId }: { comments: CommentListProps[]; postI
             className={'w-8 h-8 rounded-full'}
           />
           <form
-            action={''}
+            action={add}
             className={'flex flex-1 items-center justify-between bg-slate-100 rounded-xl text-sm px-6 py-2 w-full'}
           >
             <input
+              name={'comment'}
               value={desc}
               onChange={e => setDesc(e.target.value)}
               type='text'
@@ -46,7 +85,7 @@ const CommentList = ({ comments, postId }: { comments: CommentListProps[]; postI
       {/*COMMENTS*/}
       <div>
         {/*COMMENT*/}
-        {optimisticComments.map(comment => (
+        {optimisticComment.map(comment => (
           <div key={comment.id} className={'flex gap-4 justify-between mt-6'}>
             {/*AVATAR*/}
             <Image
