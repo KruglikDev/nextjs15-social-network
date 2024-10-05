@@ -1,3 +1,4 @@
+Проекту требуется рабочая mySql БД, как создать локально:
 1.Для создания MySQL базы данных в Docker на macOS, выполните следующие шаги:
 `docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=your_password -e MYSQL_DATABASE=your_database_name -p 3306:3306 -d mysql:latest`
 --name mysql-container — это имя контейнера. 
@@ -41,6 +42,6 @@ DESCRIBE table_name;
    После завершения работы вы можете выйти из MySQL, введя команду:
 exit
 
-`npx prisma studio` - удобно управлять БД
-
+Полезные команды для работы с Prisma:
+`npx prisma studio` - удобно управлять БД из браузера
 `npx prisma db push` - для отправки модели в БД
