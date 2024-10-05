@@ -1,3 +1,13 @@
+<h2 align="center">nextjs15 social network</h3>
+
+  <p align="center">
+   Practicing nextjs 15 and react 19
+    <br />
+</p>
+
+<!-- ABOUT THE PROJECT -->
+![Alt text](/public/promo.png?raw=true "promo")
+
 Проекту требуется рабочая mySql БД, как создать локально:
 1.Для создания MySQL базы данных в Docker на macOS, выполните следующие шаги:
 `docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=your_password -e MYSQL_DATABASE=your_database_name -p 3306:3306 -d mysql:latest`
